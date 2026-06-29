@@ -11,4 +11,10 @@ describe("Ahorcado", () => {
     const juego = new Ahorcado("GATO");
     expect(juego.vidas()).toBe(6);
   });
+
+  it("al ingresar una letra correcta, se revela en la posicion correcta", () => {
+    const juego = new Ahorcado("GATO");
+    juego.adivinar("A");
+    expect(juego.palabraEnmascarada()).toBe("_ A _ _");
+  });
 });
