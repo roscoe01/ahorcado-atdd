@@ -1,14 +1,19 @@
 export class Ahorcado {
   private palabra: string;
+  private letrasAdivinadas: string[] = [];
 
   constructor(palabra: string) {
     this.palabra = palabra;
   }
 
+  adivinar(letra: string): void {
+    this.letrasAdivinadas.push(letra.toUpperCase());
+  }
+
   palabraEnmascarada(): string {
     return this.palabra
       .split("")
-      .map(() => "_")
+      .map((l) => (this.letrasAdivinadas.includes(l) ? l : "_"))
       .join(" ");
   }
 
