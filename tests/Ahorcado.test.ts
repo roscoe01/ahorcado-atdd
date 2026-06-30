@@ -17,4 +17,9 @@ describe("Ahorcado", () => {
     juego.adivinar("A");
     expect(juego.palabraEnmascarada()).toBe("_ A _ _");
   });
+  it("al fallar una letra, las vidas bajan a 5", () => {
+  const juego = new Ahorcado("GATO");
+  juego.adivinar("E");   // ← esta línea falta
+  expect(juego.vidas()).toBe(5);
+});
 });
