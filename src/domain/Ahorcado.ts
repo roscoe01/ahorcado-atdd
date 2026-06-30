@@ -1,13 +1,19 @@
 export class Ahorcado {
   private palabra: string;
   private letrasAdivinadas: string[] = [];
+  private vidasPerdidas: number = 0;
 
   constructor(palabra: string) {
     this.palabra = palabra;
   }
 
   adivinar(letra: string): void {
-    this.letrasAdivinadas.push(letra.toUpperCase());
+    const letraMayuscula = letra.toUpperCase();
+    if (!this.palabra.includes(letraMayuscula)) {
+      this.vidasPerdidas++;
+    } else {
+      this.letrasAdivinadas.push(letraMayuscula);
+    }
   }
 
   palabraEnmascarada(): string {
@@ -18,6 +24,6 @@ export class Ahorcado {
   }
 
   vidas(): number {
-    return 6; // En el AT #1 ponemos que desvuelva 6 siempre, ya que aún no hicimos la funcionalidad de que bajen las vidas.
+    return 6 - this.vidasPerdidas;
   }
 }
