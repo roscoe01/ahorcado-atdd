@@ -2,7 +2,7 @@ import { Ahorcado } from "../domain/Ahorcado";
 
 export function montarApp(contenedor: HTMLElement, juego: Ahorcado): void {
   function render() {
-    const mensaje = juego.gano() ? "Felicidades papu, ganaste." : ""; // Le pregunta al archivo Ahorcado.ts si gano() es true, si es así devuelve GANASTE sino por ahora lo dejamos vacío.
+    const mensaje = juego.gano() ? "Felicidades papu, ganaste." : juego.perdio() ? "PERDISTE" : ""; // Le pregunta al archivo Ahorcado.ts si gano() es true, si es así devuelve GANASTE sino por ahora lo dejamos vacío.
     contenedor.innerHTML = `
       <h1>Ahorcado</h1>
       <p data-testid="word">${juego.palabraEnmascarada()}</p>
