@@ -32,6 +32,10 @@ export class Ahorcado {
     return 6 - this.vidasPerdidas;
   }
 
+  letraRepetida(letra: string): boolean {
+    return this.letrasIntentadas.includes(letra.toUpperCase());
+  }
+
   perdio(): boolean {
     return this.vidasPerdidas >= 6;
   }
