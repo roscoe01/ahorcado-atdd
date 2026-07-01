@@ -21,5 +21,14 @@ describe("Ahorcado", () => {
   const juego = new Ahorcado("GATO");
   juego.adivinar("E");   // ← esta línea falta
   expect(juego.vidas()).toBe(5);
+
+  
 });
+it("gano() es true cuando se adivinaron todas las letras", () => {
+    const juego = new Ahorcado("SOL");
+    juego.adivinar("S");
+    juego.adivinar("O");
+    juego.adivinar("L");
+    expect(juego.gano()).toBe(true);
+  });
 });
