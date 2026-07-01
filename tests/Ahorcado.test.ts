@@ -31,4 +31,15 @@ it("gano() es true cuando se adivinaron todas las letras", () => {
     juego.adivinar("L");
     expect(juego.gano()).toBe(true);
   });
+
+  it("perdio() es true cuando se agotaron las 6 vidas", () => {
+    const juego = new Ahorcado("SOL");
+    juego.adivinar("A");
+    juego.adivinar("B");
+    juego.adivinar("C");
+    juego.adivinar("D");
+    juego.adivinar("E");
+    juego.adivinar("F");
+    expect(juego.perdio()).toBe(true);
+  });
 });
