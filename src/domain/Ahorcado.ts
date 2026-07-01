@@ -27,6 +27,10 @@ export class Ahorcado {
     return 6 - this.vidasPerdidas;
   }
 
+  perdio(): boolean {
+    return this.vidasPerdidas >= 6;
+  }
+
   gano(): boolean {
     return this.palabra
       .split("") // si la palabra es "SOL" -> ["S","O","L"] este metodo nos separa las letras de la palabra y nos devuelve un array con cada letra
