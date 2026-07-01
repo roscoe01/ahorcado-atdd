@@ -32,6 +32,13 @@ it("gano() es true cuando se adivinaron todas las letras", () => {
     expect(juego.gano()).toBe(true);
   });
 
+  it("al repetir una letra, las vidas quedan iguales", () => {
+    const juego = new Ahorcado("GATO");
+    juego.adivinar("E");
+    juego.adivinar("E");
+    expect(juego.vidas()).toBe(5);
+  });
+
   it("perdio() es true cuando se agotaron las 6 vidas", () => {
     const juego = new Ahorcado("SOL");
     juego.adivinar("A");
