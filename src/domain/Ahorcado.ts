@@ -26,4 +26,10 @@ export class Ahorcado {
   vidas(): number {
     return 6 - this.vidasPerdidas;
   }
+
+  gano(): boolean {
+    return this.palabra
+      .split("") // si la palabra es "SOL" -> ["S","O","L"] este metodo nos separa las letras de la palabra y nos devuelve un array con cada letra
+      .every((l) => this.letrasAdivinadas.includes(l)); // este metodo pregunta si todas las letras de la palabra están adivinadas
+  }
 }
