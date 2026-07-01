@@ -1,6 +1,7 @@
 export class Ahorcado {
   private palabra: string;
   private letrasAdivinadas: string[] = [];
+  private letrasIntentadas: string[] = [];
   private vidasPerdidas: number = 0;
 
   constructor(palabra: string) {
@@ -9,6 +10,10 @@ export class Ahorcado {
 
   adivinar(letra: string): void {
     const letraMayuscula = letra.toUpperCase();
+    if (this.letrasIntentadas.includes(letraMayuscula)) {
+      return;
+    }
+    this.letrasIntentadas.push(letraMayuscula);
     if (!this.palabra.includes(letraMayuscula)) {
       this.vidasPerdidas++;
     } else {
