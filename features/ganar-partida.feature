@@ -6,4 +6,4 @@ Característica: Ganar la partida
     Cuando el jugador adivina la letra "S"
     Y el jugador adivina la letra "O"
     Y el jugador adivina la letra "L"
-    Entonces se ve el mensaje "GANASTE"
+    Entonces se ve el mensaje "Felicidades papu, ganaste."
