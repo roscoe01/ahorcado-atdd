@@ -10,6 +10,9 @@ export class Ahorcado {
 
   adivinar(letra: string): void {
     const letraMayuscula = letra.toUpperCase();
+    if (!this.esLetraValida(letraMayuscula)) {
+      return;
+    }
     if (this.letrasIntentadas.includes(letraMayuscula)) {
       return;
     }
@@ -19,6 +22,10 @@ export class Ahorcado {
     } else {
       this.letrasAdivinadas.push(letraMayuscula);
     }
+  }
+
+  private esLetraValida(caracter: string): boolean {
+    return caracter.length === 1 && /[A-ZÑ]/.test(caracter);
   }
 
   palabraEnmascarada(): string {
@@ -42,7 +49,7 @@ export class Ahorcado {
 
   gano(): boolean {
     return this.palabra
-      .split("") // si la palabra es "SOL" -> ["S","O","L"] este metodo nos separa las letras de la palabra y nos devuelve un array con cada letra
-      .every((l) => this.letrasAdivinadas.includes(l)); // este metodo pregunta si todas las letras de la palabra están adivinadas
+      .split("")
+      .every((l) => this.letrasAdivinadas.includes(l));
   }
 }
