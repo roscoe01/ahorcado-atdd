@@ -56,3 +56,10 @@ it("gano() es true cuando se adivinaron todas las letras", () => {
     expect(juego.perdio()).toBe(true);
   });
 });
+
+  it("al ingresar un caracter que no es letra, se ignora", () => {
+    const juego = new Ahorcado("GATO");
+    juego.adivinar("5");
+    expect(juego.palabraEnmascarada()).toBe("_ _ _ _");
+    expect(juego.vidas()).toBe(6);
+  });
