@@ -1,8 +1,8 @@
 # Unit tests por Acceptance Test
 
 ## AT1 - Iniciar partida
-- [ ] arranca enmascarando la palabra: "GATO" -> "_ _ _ _"
-- [ ] arranca con 6 vidas
+- [x] arranca enmascarando la palabra: "GATO" -> "_ _ _ _"
+- [x] arranca con 6 vidas
 
 ## AT2 - Acertar letra
 - [x] al ingresar una letra correcta, se revela en la posicion correcta
@@ -11,5 +11,14 @@
 - [x] al fallar una letra, las vidas bajan a 5
 
 ## AT4 - Ganar la partida
-- [ ] gano() es true cuando se adivinaron todas las letras
+- [x] gano() es true cuando se adivinaron todas las letras
 
+## AT5 - Perder la partida
+- [x] perdio() es true cuando se agotaron las 6 vidas
+
+## AT6 - Letra repetida
+- [x] al repetir una letra, las vidas quedan iguales
+- [x] al repetir una letra, se checkea si la letra ya fue ingresada
+
+## AT7 - Entrada invalida
+- [x] al ingresar un caracter que no es letra, se ignora
