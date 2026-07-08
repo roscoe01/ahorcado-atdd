@@ -1,10 +1,29 @@
 import { Ahorcado } from "../domain/Ahorcado";
 
+export function montarMenu(
+  contenedor: HTMLElement,
+  alElegirNivel: (nivel: string) => void
+): void {
+  const niveles = ["facil", "normal", "dificil", "imposible"];
+  contenedor.innerHTML = `
+    <h1>Ahorcado</h1>
+    <p>Elegí tu dificultad</p>
+    <div data-testid="menu">
+      ${niveles
+        .map((n) => `<button data-testid="nivel-${n}">${n}</button>`)
+        .join("")}
+    </div>
+  `;
+  niveles.forEach((nivel) => {
+    contenedor
+      .querySelector(`[data-testid="nivel-${nivel}"]`)!
+      .addEventListener("click", () => alElegirNivel(nivel));
+  });
+}
+
 export function montarApp(contenedor: HTMLElement, juego: Ahorcado): void {
   let ultimaLetraRepetida = false;
-
   const QWERTY = ["QWERTYUIOP", "ASDFGHJKL", "ZXCVBNM"];
-
   function buildTeclado(usadas: string[], acertadas: string[]): string {
     return QWERTY.map((fila) =>
       `<div class="fila-teclado">${fila.split("").map((l) => {
@@ -13,7 +32,6 @@ export function montarApp(contenedor: HTMLElement, juego: Ahorcado): void {
       }).join("")}</div>`
     ).join("");
   }
-
   function render() {
     const mensaje = juego.gano() ? "Felicidades papu, ganaste." : juego.perdio() ? "PERDISTE" : ultimaLetraRepetida ? "LETRA REPETIDA" : "";
     const usadas = juego.letrasIntentadas();
@@ -27,7 +45,6 @@ export function montarApp(contenedor: HTMLElement, juego: Ahorcado): void {
       <div data-testid="teclado">${buildTeclado(usadas, acertadas)}</div>
       ${juego.gano() || juego.perdio() ? `<button id="jugar-de-nuevo">Jugar de nuevo</button>` : ""}
     `;
-
     contenedor.querySelector("#input-letra")!.addEventListener("keydown", (e) => {
       const ke = e as KeyboardEvent;
       if (ke.key === "Enter") {
@@ -37,7 +54,6 @@ export function montarApp(contenedor: HTMLElement, juego: Ahorcado): void {
         render();
       }
     });
-
     contenedor.querySelectorAll(".tecla:not([disabled])").forEach((btn) => {
       btn.addEventListener("click", () => {
         const letra = btn.textContent!;
@@ -46,7 +62,6 @@ export function montarApp(contenedor: HTMLElement, juego: Ahorcado): void {
         render();
       });
     });
-
     contenedor.querySelector("#jugar-de-nuevo")?.addEventListener("click", () => {
       juego.reiniciar();
       ultimaLetraRepetida = false;
