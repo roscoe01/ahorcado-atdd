@@ -4,7 +4,13 @@ import { Diccionario } from "../src/domain/Diccionario";
 describe("Diccionario", () => {
   it("una palabra facil tiene 4 letras", () => {
     const diccionario = new Diccionario();
-    const palabra = diccionario.palabraAlAzar("facil"); // Creamos el diccionario y le pedimos una palabra fácil y esperamos que tenga 4 letras
+    const palabra = diccionario.palabraAlAzar("facil");
     expect(palabra.length).toBe(4);
+  });
+
+  it("una palabra normal tiene 5 letras", () => {
+    const diccionario = new Diccionario();
+    const palabra = diccionario.palabraAlAzar("normal");
+    expect(palabra.length).toBe(5);
   });
 });
