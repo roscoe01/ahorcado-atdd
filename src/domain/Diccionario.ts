@@ -1,4 +1,10 @@
 export class Diccionario {
+  private azar: () => number;
+
+  constructor(azar: () => number = Math.random) {
+    this.azar = azar;
+  }
+
   private palabras: Record<string, string[]> = {
     facil: [
       "GATO", "MESA", "PATO", "CASA", "LUNA", "ROPA", "SOPA", "MANO", "PIES", "OSOS",
@@ -25,7 +31,7 @@ export class Diccionario {
 
   palabraAlAzar(nivel: string): string {
     const opciones = this.palabras[nivel];
-    const indice = Math.floor(Math.random() * opciones.length);
+    const indice = Math.floor(this.azar() * opciones.length);
     return opciones[indice];
   }
 }
