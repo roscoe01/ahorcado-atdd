@@ -21,7 +21,11 @@ export function montarMenu(
   });
 }
 
-export function montarApp(contenedor: HTMLElement, juego: Ahorcado): void {
+export function montarApp(
+  contenedor: HTMLElement,
+  juego: Ahorcado,
+  alVolverAlMenu: () => void = () => {}
+): void {
   let ultimaLetraRepetida = false;
   const QWERTY = ["QWERTYUIOP", "ASDFGHJKL", "ZXCVBNM"];
   function buildTeclado(usadas: string[], acertadas: string[]): string {
@@ -36,6 +40,7 @@ export function montarApp(contenedor: HTMLElement, juego: Ahorcado): void {
     const mensaje = juego.gano() ? "Felicidades papu, ganaste." : juego.perdio() ? "PERDISTE" : ultimaLetraRepetida ? "LETRA REPETIDA" : "";
     const usadas = juego.letrasIntentadas();
     const acertadas = juego.letrasAcertadas();
+    const terminado = juego.gano() || juego.perdio();
     contenedor.innerHTML = `
       <h1>Ahorcado</h1>
       <p data-testid="word">${juego.palabraEnmascarada()}</p>
@@ -43,7 +48,8 @@ export function montarApp(contenedor: HTMLElement, juego: Ahorcado): void {
       <p data-testid="message">${mensaje}</p>
       <input type="text" maxlength="1" id="input-letra" />
       <div data-testid="teclado">${buildTeclado(usadas, acertadas)}</div>
-      ${juego.gano() || juego.perdio() ? `<button id="jugar-de-nuevo">Jugar de nuevo</button>` : ""}
+      ${terminado ? `<button id="jugar-de-nuevo">Jugar de nuevo</button>` : ""}
+      ${terminado ? `<button id="volver-al-menu">Volver al menu</button>` : ""}
     `;
     contenedor.querySelector("#input-letra")!.addEventListener("keydown", (e) => {
       const ke = e as KeyboardEvent;
@@ -66,6 +72,9 @@ export function montarApp(contenedor: HTMLElement, juego: Ahorcado): void {
       juego.reiniciar();
       ultimaLetraRepetida = false;
       render();
+    });
+    contenedor.querySelector("#volver-al-menu")?.addEventListener("click", () => {
+      alVolverAlMenu();
     });
   }
   render();
