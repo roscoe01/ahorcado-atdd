@@ -32,3 +32,17 @@ When("el jugador presiona jugar de nuevo", async ({ page }) => {
 Then("la letra {string} aparece marcada en el teclado", async ({ page }, letra: string) => {
   await expect(page.getByTestId(`key-${letra}`)).toHaveClass(/usada/);
 });
+
+Given("que el jugador entra al juego", async ({ page }) => {
+  await page.goto("/");
+});
+
+When("elige el nivel {string}", async ({ page }, nivel: string) => {
+  await page.getByTestId(`nivel-${nivel}`).click();
+});
+
+Then("se ven {int} espacios para adivinar", async ({ page }, cantidad: number) => {
+  const palabra = await page.getByTestId("word").textContent();
+  const guiones = palabra!.split(" ").filter((c) => c === "_").length;
+  expect(guiones).toBe(cantidad);
+});
