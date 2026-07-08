@@ -4,25 +4,26 @@ import { Diccionario } from "../src/domain/Diccionario";
 describe("Diccionario", () => {
   it("una palabra facil tiene 4 letras", () => {
     const diccionario = new Diccionario();
-    const palabra = diccionario.palabraAlAzar("facil");
-    expect(palabra.length).toBe(4);
+    expect(diccionario.palabraAlAzar("facil").length).toBe(4);
   });
 
   it("una palabra normal tiene 5 letras", () => {
     const diccionario = new Diccionario();
-    const palabra = diccionario.palabraAlAzar("normal");
-    expect(palabra.length).toBe(5);
+    expect(diccionario.palabraAlAzar("normal").length).toBe(5);
   });
 
-   it("una palabra dificil tiene 6 letras", () => {
+  it("una palabra dificil tiene 6 letras", () => {
     const diccionario = new Diccionario();
-    const palabra = diccionario.palabraAlAzar("dificil");
-    expect(palabra.length).toBe(6);
+    expect(diccionario.palabraAlAzar("dificil").length).toBe(6);
   });
 
   it("una palabra imposible tiene 8 letras", () => {
     const diccionario = new Diccionario();
-    const palabra = diccionario.palabraAlAzar("imposible");
-    expect(palabra.length).toBe(8);
+    expect(diccionario.palabraAlAzar("imposible").length).toBe(8);
+  });
+
+  it("usa el azar que se le inyecta para elegir la palabra", () => {
+    const diccionario = new Diccionario(() => 0);
+    expect(diccionario.palabraAlAzar("normal")).toBe("PERRO");
   });
 });
