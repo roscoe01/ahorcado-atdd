@@ -49,6 +49,10 @@ export class Ahorcado {
     return [...this._letrasIntentadas];
   }
 
+  letrasAcertadas(): string[] {
+    return [...this.letrasAdivinadas];
+  }
+
   letraRepetida(letra: string): boolean {
     return this._letrasIntentadas.includes(letra.toUpperCase());
   }
