@@ -1,7 +1,7 @@
 export class Ahorcado {
   private palabra: string;
   private letrasAdivinadas: string[] = [];
-  private letrasIntentadas: string[] = [];
+  private _letrasIntentadas: string[] = [];
   private vidasPerdidas: number = 0;
 
   constructor(palabra: string) {
@@ -13,10 +13,10 @@ export class Ahorcado {
     if (!this.esLetraValida(letraMayuscula)) {
       return;
     }
-    if (this.letrasIntentadas.includes(letraMayuscula)) {
+    if (this._letrasIntentadas.includes(letraMayuscula)) {
       return;
     }
-    this.letrasIntentadas.push(letraMayuscula);
+    this._letrasIntentadas.push(letraMayuscula);
     if (!this.palabra.includes(letraMayuscula)) {
       this.vidasPerdidas++;
     } else {
@@ -39,8 +39,12 @@ export class Ahorcado {
     return 6 - this.vidasPerdidas;
   }
 
+  letrasIntentadas(): string[] {
+    return [...this._letrasIntentadas];
+  }
+
   letraRepetida(letra: string): boolean {
-    return this.letrasIntentadas.includes(letra.toUpperCase());
+    return this._letrasIntentadas.includes(letra.toUpperCase());
   }
 
   perdio(): boolean {
