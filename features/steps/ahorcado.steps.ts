@@ -46,3 +46,11 @@ Then("se ven {int} espacios para adivinar", async ({ page }, cantidad: number) =
   const guiones = palabra!.split(" ").filter((c) => c === "_").length;
   expect(guiones).toBe(cantidad);
 });
+
+When("el jugador presiona volver al menu", async ({ page }) => {
+  await page.getByRole("button", { name: "Volver al menu" }).click();
+});
+
+Then("se ve el menu de dificultad", async ({ page }) => {
+  await expect(page.getByTestId("menu")).toBeVisible();
+});
