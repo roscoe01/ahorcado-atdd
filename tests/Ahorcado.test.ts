@@ -52,6 +52,18 @@ it("gano() es true cuando se adivinaron todas las letras", () => {
     expect(juego.letrasIntentadas()).toEqual(["A", "E"]);
   });
 
+  it("adivinar() no hace nada si la partida ya terminó", () => {
+    const juego = new Ahorcado("SOL");
+    juego.adivinar("A");
+    juego.adivinar("B");
+    juego.adivinar("C");
+    juego.adivinar("D");
+    juego.adivinar("E");
+    juego.adivinar("F");
+    juego.adivinar("G");
+    expect(juego.vidas()).toBe(0);
+  });
+
   it("reiniciar() vuelve el juego al estado inicial", () => {
     const juego = new Ahorcado("GATO");
     juego.adivinar("A");
