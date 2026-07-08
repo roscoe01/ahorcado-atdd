@@ -1,0 +1,60 @@
+name: CI/CD
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+jobs:
+  verificar:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Bajar el codigo
+        uses: actions/checkout@v4
+
+      - name: Instalar Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Instalar dependencias
+        run: npm ci
+
+      - name: Build
+        run: npm run build
+
+      - name: Unit tests + coverage
+        run: npm run coverage
+
+      - name: Analisis estatico (ESLint)
+        run: npm run lint
+
+      - name: Instalar navegador para Playwright
+        run: npx playwright install chromium
+
+      - name: Acceptance tests
+        run: npm run at
+
+      - name: Subir el build para Pages
+        if: github.ref == 'refs/heads/master'
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+
+  deploy:
+    needs: verificar
+    if: github.ref == 'refs/heads/master'
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Publicar en GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
