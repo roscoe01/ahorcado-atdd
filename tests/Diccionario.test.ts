@@ -19,4 +19,10 @@ describe("Diccionario", () => {
     const palabra = diccionario.palabraAlAzar("dificil");
     expect(palabra.length).toBe(6);
   });
+
+  it("una palabra imposible tiene 8 letras", () => {
+    const diccionario = new Diccionario();
+    const palabra = diccionario.palabraAlAzar("imposible");
+    expect(palabra.length).toBe(8);
+  });
 });
