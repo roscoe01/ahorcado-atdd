@@ -1,6 +1,6 @@
 export class Diccionario {
   private palabras: Record<string, string[]> = {
-    facil: ["GATO", "MESA", "SOL", "CASA"],
+    facil: ["GATO", "MESA", "PATO", "CASA"],
     normal: ["PERRO", "LIBRO", "VERDE"],
     dificil: ["VENTANA", "CAMISON", "JOAQUIN"],
     imposible: ["MURCIELAGO", "ELEFANTES"],
