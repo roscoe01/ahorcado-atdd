@@ -11,3 +11,4 @@ Característica: Volver al menu
     Y el jugador adivina la letra "F"
     Cuando el jugador presiona volver al menu
     Entonces se ve el menu de dificultad
+
