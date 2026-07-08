@@ -18,6 +18,7 @@ export function montarApp(contenedor: HTMLElement, juego: Ahorcado): void {
       <p data-testid="message">${mensaje}</p>
       <div data-testid="teclado">${teclado}</div>
       <input type="text" maxlength="1" />
+      ${juego.gano() || juego.perdio() ? `<button id="jugar-de-nuevo">Jugar de nuevo</button>` : ""}
     `;
     contenedor.querySelector("input")!.addEventListener("keydown", (e) => {
       if (e.key === "Enter") {
@@ -26,6 +27,11 @@ export function montarApp(contenedor: HTMLElement, juego: Ahorcado): void {
         juego.adivinar(input.value);
         render();
       }
+    });
+    contenedor.querySelector("#jugar-de-nuevo")?.addEventListener("click", () => {
+      juego.reiniciar();
+      ultimaLetraRepetida = false;
+      render();
     });
   }
   render();
