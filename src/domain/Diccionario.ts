@@ -3,7 +3,7 @@ export class Diccionario {
     facil: ["GATO", "MESA", "PATO", "CASA"],
     normal: ["PERRO", "LIBRO", "VERDE", "FELIZ"],
     dificil: ["CARTON", "PLANTA", "SILLON"],
-    imposible: ["MURCIELAGO", "ARQUITECTO"],
+    imposible: ["ELEFANTE", "MARIPOSA", "CABALLOS"],
   };
 
   palabraAlAzar(nivel: string): string {
