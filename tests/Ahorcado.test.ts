@@ -45,6 +45,13 @@ it("gano() es true cuando se adivinaron todas las letras", () => {
     expect(juego.vidas()).toBe(5);
   });
 
+  it("letrasIntentadas() devuelve las letras que ya fueron usadas", () => {
+    const juego = new Ahorcado("GATO");
+    juego.adivinar("A");
+    juego.adivinar("E");
+    expect(juego.letrasIntentadas()).toEqual(["A", "E"]);
+  });
+
   it("perdio() es true cuando se agotaron las 6 vidas", () => {
     const juego = new Ahorcado("SOL");
     juego.adivinar("A");
