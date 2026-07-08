@@ -9,6 +9,9 @@ export class Ahorcado {
   }
 
   adivinar(letra: string): void {
+    if (this.gano() || this.perdio()) {
+      return;
+    }
     const letraMayuscula = letra.toUpperCase();
     if (!this.esLetraValida(letraMayuscula)) {
       return;
