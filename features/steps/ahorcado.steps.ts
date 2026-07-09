@@ -54,3 +54,11 @@ When("el jugador presiona volver al menu", async ({ page }) => {
 Then("se ve el menu de dificultad", async ({ page }) => {
   await expect(page.getByTestId("menu")).toBeVisible();
 });
+
+When("el jugador prueba todas las letras", async ({ page }) => {
+  const input = page.getByRole("textbox");
+  for (const letra of "ABCDEFGHIJKLMNOPQRSTUVWXYZ") {
+    await input.fill(letra);
+    await input.press("Enter");
+  }
+});

@@ -33,7 +33,11 @@ export function montarMenu(
   });
 }
 
-export function montarApp(contenedor: HTMLElement, juego: Ahorcado): void {
+export function montarApp(
+  contenedor: HTMLElement,
+  juego: Ahorcado,
+  alJugarDeNuevo: () => void = () => {}
+): void {
   let ultimaLetraRepetida = false;
 
   function buildTiles(): string {
@@ -141,10 +145,13 @@ export function montarApp(contenedor: HTMLElement, juego: Ahorcado): void {
       });
     }
 
+    // "Jugar de nuevo" delega en index.ts: otra palabra del mismo nivel (si se
+    // entró por el menú) o la misma palabra reiniciada (si se entró por ?word=).
+    // No llamamos a juego.reiniciar() acá para no pisar esa lógica del compañero.
     contenedor.querySelector("#jugar-de-nuevo")?.addEventListener("click", () => {
-      juego.reiniciar();
+      limpiarKeydown();
       ultimaLetraRepetida = false;
-      render();
+      alJugarDeNuevo();
     });
   }
 
