@@ -24,7 +24,8 @@ export function montarMenu(
 export function montarApp(
   contenedor: HTMLElement,
   juego: Ahorcado,
-  alVolverAlMenu: () => void = () => {}
+  alVolverAlMenu: () => void = () => {},
+  alJugarDeNuevo: () => void = () => {}
 ): void {
   let ultimaLetraRepetida = false;
   const QWERTY = ["QWERTYUIOP", "ASDFGHJKL", "ZXCVBNM"];
@@ -69,9 +70,7 @@ export function montarApp(
       });
     });
     contenedor.querySelector("#jugar-de-nuevo")?.addEventListener("click", () => {
-      juego.reiniciar();
-      ultimaLetraRepetida = false;
-      render();
+      alJugarDeNuevo();
     });
     contenedor.querySelector("#volver-al-menu")?.addEventListener("click", () => {
       alVolverAlMenu();
