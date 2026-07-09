@@ -1,12 +1,30 @@
 <!doctype html>
 <html lang="es">
-    <head>
-        <meta charset="UTF-8" />
-        <title>Ahorcado</title>
-    </head>
-    <body>
-        <div id="app"></div>
-        <link rel="stylesheet" href="/src/ui/style.css" />
-        <script type="module" src="/src/ui/index.ts"></script>
-    </body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Ahorcadle</title>
+    <link rel="stylesheet" href="/src/ui/style.css" />
+  </head>
+  <body>
+    <header class="navbar">
+      <button class="nav-home" id="nav-home" aria-label="Volver al menu" title="Volver al menú">
+        <svg class="navbar-logo" viewBox="0 0 32 32" width="30" height="30" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <line x1="4" y1="29" x2="19" y2="29" />
+          <line x1="8" y1="29" x2="8" y2="4" />
+          <line x1="7" y1="4" x2="23" y2="4" />
+          <line x1="23" y1="4" x2="23" y2="8" />
+          <circle cx="23" cy="11" r="3" />
+          <line x1="23" y1="14" x2="23" y2="21" />
+          <line x1="23" y1="16" x2="20" y2="19" />
+          <line x1="23" y1="16" x2="26" y2="19" />
+          <line x1="23" y1="21" x2="20" y2="25" />
+          <line x1="23" y1="21" x2="26" y2="25" />
+        </svg>
+        <span class="navbar-title">Ahorcadle</span>
+      </button>
+    </header>
+    <div id="app"></div>
+    <script type="module" src="/src/ui/index.ts"></script>
+  </body>
 </html>

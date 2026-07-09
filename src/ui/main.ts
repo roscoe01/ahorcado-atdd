@@ -1,17 +1,29 @@
 import { Ahorcado } from "../domain/Ahorcado";
 
+const QWERTY = ["QWERTYUIOP", "ASDFGHJKL", "ZXCVBNM"];
+
+// Manejo global del listener del teclado físico: así, al cambiar de pantalla
+// (menú, nueva partida) no se acumulan listeners viejos apuntando a juegos muertos.
+let keydownActual: ((e: KeyboardEvent) => void) | null = null;
+function limpiarKeydown(): void {
+  if (keydownActual) {
+    document.removeEventListener("keydown", keydownActual);
+    keydownActual = null;
+  }
+}
+
 export function montarMenu(
   contenedor: HTMLElement,
   alElegirNivel: (nivel: string) => void
 ): void {
+  limpiarKeydown();
   const niveles = ["facil", "normal", "dificil", "imposible"];
   contenedor.innerHTML = `
-    <h1>Ahorcado</h1>
-    <p>Elegí tu dificultad</p>
-    <div data-testid="menu">
-      ${niveles
-        .map((n) => `<button data-testid="nivel-${n}">${n}</button>`)
-        .join("")}
+    <div class="menu-container">
+      <h2>Elegí tu dificultad</h2>
+      <div data-testid="menu">
+        ${niveles.map((n) => `<button class="btn-nivel" data-testid="nivel-${n}">${n}</button>`).join("")}
+      </div>
     </div>
   `;
   niveles.forEach((nivel) => {
@@ -21,61 +33,120 @@ export function montarMenu(
   });
 }
 
-export function montarApp(
-  contenedor: HTMLElement,
-  juego: Ahorcado,
-  alVolverAlMenu: () => void = () => {}
-): void {
+export function montarApp(contenedor: HTMLElement, juego: Ahorcado): void {
   let ultimaLetraRepetida = false;
-  const QWERTY = ["QWERTYUIOP", "ASDFGHJKL", "ZXCVBNM"];
+
+  function buildTiles(): string {
+    return juego
+      .palabraEnmascarada()
+      .split(" ")
+      .map((c) =>
+        c === "_"
+          ? `<div class="tile"></div>`
+          : `<div class="tile revealed">${c}</div>`
+      )
+      .join("");
+  }
+
   function buildTeclado(usadas: string[], acertadas: string[]): string {
-    return QWERTY.map((fila) =>
-      `<div class="fila-teclado">${fila.split("").map((l) => {
-        const clase = acertadas.includes(l) ? "usada acertada" : usadas.includes(l) ? "usada fallada" : "";
-        return `<button data-testid="key-${l}" class="tecla ${clase}" ${usadas.includes(l) ? "disabled" : ""}>${l}</button>`;
-      }).join("")}</div>`
+    return QWERTY.map(
+      (fila) =>
+        `<div class="fila-teclado">${fila
+          .split("")
+          .map((l) => {
+            const clase = acertadas.includes(l)
+              ? "tecla usada acertada"
+              : usadas.includes(l)
+              ? "tecla usada fallada"
+              : "tecla";
+            return `<button data-testid="key-${l}" class="${clase}" ${usadas.includes(l) ? "disabled" : ""}>${l}</button>`;
+          })
+          .join("")}</div>`
     ).join("");
   }
-  function render() {
-    const mensaje = juego.gano() ? "Felicidades papu, ganaste." : juego.perdio() ? "PERDISTE" : ultimaLetraRepetida ? "LETRA REPETIDA" : "";
+
+  function render(): void {
+    limpiarKeydown();
+
+    const terminado = juego.gano() || juego.perdio();
     const usadas = juego.letrasIntentadas();
     const acertadas = juego.letrasAcertadas();
-    const terminado = juego.gano() || juego.perdio();
+
+    let mensajeClase = "message-box";
+    let mensajeTexto = ultimaLetraRepetida ? "LETRA REPETIDA" : "";
+    if (juego.gano()) { mensajeTexto = "Felicidades papu, ganaste."; mensajeClase += " ganaste"; }
+    if (juego.perdio()) { mensajeTexto = "PERDISTE"; mensajeClase += " perdiste"; }
+
     contenedor.innerHTML = `
-      <h1>Ahorcado</h1>
-      <p data-testid="word">${juego.palabraEnmascarada()}</p>
-      <p>Vidas: <span data-testid="lives">${juego.vidas()}</span></p>
-      <p data-testid="message">${mensaje}</p>
-      <input type="text" maxlength="1" id="input-letra" />
-      <div data-testid="teclado">${buildTeclado(usadas, acertadas)}</div>
-      ${terminado ? `<button id="jugar-de-nuevo">Jugar de nuevo</button>` : ""}
-      ${terminado ? `<button id="volver-al-menu">Volver al menu</button>` : ""}
+      <div class="word-tiles">${buildTiles()}</div>
+      <div class="lives-display">
+        <span class="lives-label">Vidas</span>
+        <span class="lives-pill" data-testid="lives">${juego.vidas()}</span>
+      </div>
+      <p data-testid="word" style="display:none">${juego.palabraEnmascarada()}</p>
+      <div class="${mensajeClase}" data-testid="message">${mensajeTexto}</div>
+      <div class="input-area${terminado ? " apagado" : ""}">
+        <input
+          type="text"
+          id="input-letra"
+          class="input-letra"
+          maxlength="1"
+          autocomplete="off"
+          spellcheck="false"
+        />
+      </div>
+      <div class="teclado-container${terminado ? " apagado" : ""}" data-testid="teclado">
+        ${buildTeclado(usadas, acertadas)}
+      </div>
+      ${terminado ? `
+      <div class="acciones">
+        <button class="btn-accion btn-primario" id="jugar-de-nuevo">Jugar de nuevo</button>
+      </div>` : ""}
     `;
-    contenedor.querySelector("#input-letra")!.addEventListener("keydown", (e) => {
-      const ke = e as KeyboardEvent;
-      if (ke.key === "Enter") {
-        const input = e.target as HTMLInputElement;
-        ultimaLetraRepetida = juego.letraRepetida(input.value);
-        juego.adivinar(input.value);
-        render();
-      }
-    });
-    contenedor.querySelectorAll(".tecla:not([disabled])").forEach((btn) => {
-      btn.addEventListener("click", () => {
-        const letra = btn.textContent!;
-        ultimaLetraRepetida = juego.letraRepetida(letra);
-        juego.adivinar(letra);
-        render();
+
+    const input = contenedor.querySelector<HTMLInputElement>("#input-letra");
+
+    if (input) {
+      if (!terminado) input.focus();
+
+      // Teclado físico: cualquier tecla alfabética se escribe directo en la barra
+      keydownActual = (e: KeyboardEvent) => {
+        if (terminado) return;
+        if (e.key === "Enter") {
+          const val = input.value.trim();
+          if (val) {
+            ultimaLetraRepetida = juego.letraRepetida(val);
+            juego.adivinar(val);
+            render();
+          }
+        } else if (/^[a-zA-ZÑñ]$/.test(e.key)) {
+          input.value = e.key.toUpperCase();
+          e.preventDefault();
+        } else if (e.key === "Backspace") {
+          input.value = "";
+          e.preventDefault();
+        }
+      };
+      document.addEventListener("keydown", keydownActual);
+
+      // Clic en tecla del teclado visual
+      contenedor.querySelectorAll(".tecla:not([disabled])").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          if (terminado) return;
+          const letra = btn.textContent!.trim();
+          ultimaLetraRepetida = juego.letraRepetida(letra);
+          juego.adivinar(letra);
+          render();
+        });
       });
-    });
+    }
+
     contenedor.querySelector("#jugar-de-nuevo")?.addEventListener("click", () => {
       juego.reiniciar();
       ultimaLetraRepetida = false;
       render();
     });
-    contenedor.querySelector("#volver-al-menu")?.addEventListener("click", () => {
-      alVolverAlMenu();
-    });
   }
+
   render();
 }

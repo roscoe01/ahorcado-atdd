@@ -10,13 +10,18 @@ const diccionario = new Diccionario();
 function mostrarMenu() {
   montarMenu(contenedor, (nivel) => {
     const palabra = diccionario.palabraAlAzar(nivel);
-    montarApp(contenedor, new Ahorcado(palabra), mostrarMenu);
+    montarApp(contenedor, new Ahorcado(palabra));
   });
 }
 
+// Tocar el logo / la barra superior siempre te devuelve al menú.
+document.getElementById("nav-home")?.addEventListener("click", () => {
+  mostrarMenu();
+});
+
 if (palabraFijada) {
   // Vino ?word= : juego directo (los tests entran acá)
-  montarApp(contenedor, new Ahorcado(palabraFijada), mostrarMenu);
+  montarApp(contenedor, new Ahorcado(palabraFijada));
 } else {
   // Sin ?word= : arrancamos mostrando el menú
   mostrarMenu();

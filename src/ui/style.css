@@ -1,34 +1,328 @@
-.fila-teclado {
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  /* Paleta invertida: Midnight de fondo, Sunburst como acento */
+  --midnight: #252c37;
+  --sunburst: #f8c61e;
+
+  --bg: var(--midnight);
+  --surface: #2e3742;
+  --line: #3a434f;
+  --text: #f3f4f2;
+  --muted: #9aa1ab;
+  --accent: var(--sunburst);
+
+  /* Feedback acierto / fallo (suaves, planos) */
+  --verde: #4bb45f;
+  --rojo: #e5533d;
+
+  --sans: 'Segoe UI', system-ui, -apple-system, Arial, sans-serif;
+}
+
+body {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: var(--text);
+  font-family: var(--sans);
+  background: var(--bg);
+}
+
+/* ── Navbar ── */
+.navbar {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 18px 20px;
+  border-bottom: 1px solid var(--line);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: var(--bg);
+}
+
+.nav-home {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 4px 8px;
+  transition: opacity 0.15s;
+}
+
+.nav-home:hover {
+  opacity: 0.75;
+}
+
+.navbar-logo {
+  display: block;
+  color: var(--accent);
+}
+
+.navbar-title {
+  font-size: 26px;
+  font-weight: 600;
+  letter-spacing: 6px;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+/* ── App container (ancho genérico que se adapta a palabras largas) ── */
+#app {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: fit-content;
+  min-width: min(92vw, 400px);
+  max-width: 95vw;
+  padding: 24px 28px 32px;
+  gap: 24px;
+  flex: 1;
+}
+
+/* ── Menu de dificultad ── */
+.menu-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 28px;
+  margin: 40px 0;
+}
+
+.menu-container h2 {
+  font-size: 18px;
+  font-weight: 500;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+[data-testid="menu"] {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 240px;
+}
+
+.btn-nivel {
+  padding: 15px 0;
+  font-family: var(--sans);
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  background: transparent;
+  color: var(--text);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: border-color 0.18s, color 0.18s;
+}
+
+.btn-nivel:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+/* ── Tiles de la palabra ── */
+.word-tiles {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  flex-wrap: nowrap;
+}
+
+.tile {
+  width: clamp(40px, 9vw, 60px);
+  height: clamp(40px, 9vw, 60px);
+  border: 2px solid var(--line);
+  border-radius: 7px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: clamp(20px, 5vw, 30px);
+  font-weight: 600;
+  text-transform: uppercase;
+  color: var(--text);
+  background: transparent;
+}
+
+.tile.revealed {
+  border-color: var(--accent);
+  color: var(--accent);
+  animation: fade 0.25s ease;
+}
+
+@keyframes fade {
+  from { opacity: 0; transform: translateY(-4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ── Vidas ── */
+.lives-display {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.lives-label {
+  font-size: 13px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.lives-pill {
+  color: var(--accent);
+  font-weight: 700;
+  font-size: 18px;
+}
+
+/* ── Mensaje ── */
+.message-box {
+  min-height: 22px;
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--muted);
+  text-align: center;
+}
+
+.message-box.ganaste {
+  color: var(--verde);
+}
+
+.message-box.perdiste {
+  color: var(--rojo);
+}
+
+/* ── Input de letra ── */
+.input-area {
   display: flex;
   justify-content: center;
-  gap: 4px;
-  margin: 4px 0;
+  transition: opacity 0.2s;
+}
+
+.input-letra {
+  width: 64px;
+  height: 64px;
+  background: transparent;
+  border: 2px solid var(--line);
+  border-radius: 9px;
+  color: var(--text);
+  font-size: 30px;
+  font-weight: 600;
+  text-align: center;
+  text-transform: uppercase;
+  outline: none;
+  caret-color: var(--accent);
+  transition: border-color 0.15s;
+}
+
+.input-letra:focus {
+  border-color: var(--accent);
+}
+
+/* ── Teclado ── */
+.teclado-container {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: center;
+  width: 100%;
+  transition: opacity 0.2s;
+}
+
+.fila-teclado {
+  display: flex;
+  gap: 6px;
+  justify-content: center;
+  width: 100%;
 }
 
 .tecla {
-  width: 36px;
-  height: 36px;
-  font-size: 14px;
-  font-weight: bold;
+  width: clamp(30px, 8.5vw, 48px);
+  height: 56px;
+  padding: 0;
+  font-family: var(--sans);
+  font-size: 17px;
+  font-weight: 600;
   cursor: pointer;
-  border: 1px solid #999;
-  border-radius: 4px;
-  background: #f0f0f0;
+  border: none;
+  border-radius: 7px;
+  background: var(--surface);
+  color: var(--text);
+  transition: background 0.15s, transform 0.08s;
+  user-select: none;
 }
 
-.tecla.acertada {
-  background: #4caf50;
-  color: white;
-  border-color: #388e3c;
+.tecla:hover:not([disabled]) {
+  background: #3a434f;
 }
 
-.tecla.fallada {
-  background: #f44336;
-  color: white;
-  border-color: #c62828;
+.tecla:active:not([disabled]) {
+  transform: scale(0.94);
 }
 
 .tecla[disabled] {
-  cursor: not-allowed;
-  opacity: 0.7;
+  cursor: default;
+}
+
+.tecla.usada.acertada {
+  background: var(--verde);
+  color: #ffffff;
+}
+
+.tecla.usada.fallada {
+  background: var(--rojo);
+  color: #ffffff;
+}
+
+/* ── Estado apagado (juego terminado) ── */
+.apagado {
+  opacity: 0.3;
+  pointer-events: none;
+}
+
+/* ── Botones de acción ── */
+.acciones {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-top: 8px;
+}
+
+.btn-accion {
+  padding: 13px 26px;
+  font-family: var(--sans);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.18s, color 0.18s;
+}
+
+.btn-primario {
+  background: transparent;
+  color: var(--accent);
+  border: 1.5px solid var(--accent);
+}
+
+.btn-primario:hover {
+  background: var(--accent);
+  color: var(--midnight);
 }
