@@ -90,6 +90,12 @@ it("gano() es true cuando se adivinaron todas las letras", () => {
     juego.adivinar("E");
     expect(juego.partesDibujadas()).toBe(1);
   });
+
+  it("al perder, se revela la palabra completa", () => {
+    const juego = new Ahorcado("GATO");
+    ["E", "I", "U", "R", "S", "D"].forEach((l) => juego.adivinar(l));
+    expect(juego.palabraEnmascarada()).toBe("G A T O");
+  });
 });
 
   it("al ingresar un caracter que no es letra, se ignora", () => {
