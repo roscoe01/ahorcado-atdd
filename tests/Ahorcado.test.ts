@@ -84,6 +84,12 @@ it("gano() es true cuando se adivinaron todas las letras", () => {
     juego.adivinar("F");
     expect(juego.perdio()).toBe(true);
   });
+
+  it("al fallar una letra, se dibuja una parte del muñeco", () => {
+    const juego = new Ahorcado("GATO");
+    juego.adivinar("E");
+    expect(juego.partesDibujadas()).toBe(1);
+  });
 });
 
   it("al ingresar un caracter que no es letra, se ignora", () => {
