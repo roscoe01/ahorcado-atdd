@@ -39,15 +39,17 @@ export function montarApp(
   alJugarDeNuevo: () => void = () => {}
 ): void {
   let ultimaLetraRepetida = false;
+  let ultimoFallo = false;
 
   function buildTiles(): string {
+    const perdido = juego.perdio();
     return juego
       .palabraEnmascarada()
       .split(" ")
       .map((c) =>
         c === "_"
           ? `<div class="tile"></div>`
-          : `<div class="tile revealed">${c}</div>`
+          : `<div class="tile revealed${perdido ? " perdida" : ""}">${c}</div>`
       )
       .join("");
   }
@@ -72,8 +74,20 @@ export function montarApp(
   // Las 6 partes del muñeco, en el orden en que se van dibujando a medida
   // que se pierden vidas: cabeza, torso, brazo, brazo, pierna, pierna.
   function buildMuneco(): string {
+    const perdido = juego.perdio();
+    // Carita: ojos normales mientras juega, ojos en X (muerto) cuando perdés.
+    const cara = perdido
+      ? `<g class="cara muerta">
+           <line x1="122" y1="49" x2="127" y2="54" /><line x1="127" y1="49" x2="122" y2="54" />
+           <line x1="133" y1="49" x2="138" y2="54" /><line x1="138" y1="49" x2="133" y2="54" />
+           <path d="M124 63 Q130 58 136 63" fill="none" />
+         </g>`
+      : `<g class="cara">
+           <circle cx="124.5" cy="52" r="1.8" /><circle cx="135.5" cy="52" r="1.8" />
+           <path d="M124 60 Q130 65 136 60" fill="none" />
+         </g>`;
     const partes = [
-      `<circle data-testid="parte-cabeza" class="parte" cx="130" cy="55" r="15" />`,
+      `<g data-testid="parte-cabeza" class="parte"><circle cx="130" cy="55" r="15" />${cara}</g>`,
       `<line data-testid="parte-torso" class="parte" x1="130" y1="70" x2="130" y2="130" />`,
       `<line data-testid="parte-brazo-izq" class="parte" x1="130" y1="85" x2="105" y2="110" />`,
       `<line data-testid="parte-brazo-der" class="parte" x1="130" y1="85" x2="155" y2="110" />`,
@@ -105,7 +119,7 @@ export function montarApp(
     if (juego.perdio()) { mensajeTexto = "PERDISTE"; mensajeClase += " perdiste"; }
 
     contenedor.innerHTML = `
-      <div class="muneco-wrap">${buildMuneco()}</div>
+      <div class="muneco-wrap${ultimoFallo ? " shake" : ""}">${buildMuneco()}</div>
       <div class="word-tiles">${buildTiles()}</div>
       <div class="lives-display">
         <span class="lives-label">Vidas</span>
@@ -144,7 +158,9 @@ export function montarApp(
           const val = input.value.trim();
           if (val) {
             ultimaLetraRepetida = juego.letraRepetida(val);
+            const vidasAntes = juego.vidas();
             juego.adivinar(val);
+            ultimoFallo = juego.vidas() < vidasAntes;
             render();
           }
         } else if (/^[a-zA-ZÑñ]$/.test(e.key)) {
@@ -163,7 +179,9 @@ export function montarApp(
           if (terminado) return;
           const letra = btn.textContent!.trim();
           ultimaLetraRepetida = juego.letraRepetida(letra);
+          const vidasAntes = juego.vidas();
           juego.adivinar(letra);
+          ultimoFallo = juego.vidas() < vidasAntes;
           render();
         });
       });
@@ -175,6 +193,7 @@ export function montarApp(
     contenedor.querySelector("#jugar-de-nuevo")?.addEventListener("click", () => {
       limpiarKeydown();
       ultimaLetraRepetida = false;
+      ultimoFallo = false;
       alJugarDeNuevo();
     });
   }

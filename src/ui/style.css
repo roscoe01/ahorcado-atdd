@@ -163,6 +163,40 @@ body {
   to { opacity: 1; transform: scale(1); }
 }
 
+/* Carita del muñeco */
+.muneco .cara circle {
+  fill: var(--text);
+  stroke: none;
+}
+
+.muneco .cara path {
+  stroke: var(--text);
+  stroke-width: 2;
+  stroke-linecap: round;
+}
+
+.muneco .cara.muerta line {
+  stroke: var(--rojo);
+  stroke-width: 2.5;
+}
+
+.muneco .cara.muerta path {
+  stroke: var(--rojo);
+}
+
+/* Temblor cuando fallás una letra */
+.muneco-wrap.shake {
+  animation: temblar 0.4s ease;
+}
+
+@keyframes temblar {
+  0%, 100% { transform: translateX(0); }
+  20% { transform: translateX(-8px); }
+  40% { transform: translateX(8px); }
+  60% { transform: translateX(-5px); }
+  80% { transform: translateX(5px); }
+}
+
 /* ── Tiles de la palabra ── */
 .word-tiles {
   display: flex;
@@ -190,6 +224,11 @@ body {
   border-color: var(--accent);
   color: var(--accent);
   animation: fade 0.25s ease;
+}
+
+.tile.revealed.perdida {
+  border-color: var(--rojo);
+  color: var(--rojo);
 }
 
 @keyframes fade {
