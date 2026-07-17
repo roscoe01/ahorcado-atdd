@@ -42,6 +42,10 @@ export class Ahorcado {
     return 6 - this.vidasPerdidas;
   }
 
+  partesDibujadas(): number {
+    return 6 - this.vidas();
+  }
+
   reiniciar(): void {
     this._letrasIntentadas = [];
     this.letrasAdivinadas = [];
