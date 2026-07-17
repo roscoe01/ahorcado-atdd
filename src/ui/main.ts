@@ -69,6 +69,29 @@ export function montarApp(
     ).join("");
   }
 
+  // Las 6 partes del muñeco, en el orden en que se van dibujando a medida
+  // que se pierden vidas: cabeza, torso, brazo, brazo, pierna, pierna.
+  function buildMuneco(): string {
+    const partes = [
+      `<circle data-testid="parte-cabeza" class="parte" cx="130" cy="55" r="15" />`,
+      `<line data-testid="parte-torso" class="parte" x1="130" y1="70" x2="130" y2="130" />`,
+      `<line data-testid="parte-brazo-izq" class="parte" x1="130" y1="85" x2="105" y2="110" />`,
+      `<line data-testid="parte-brazo-der" class="parte" x1="130" y1="85" x2="155" y2="110" />`,
+      `<line data-testid="parte-pierna-izq" class="parte" x1="130" y1="130" x2="110" y2="165" />`,
+      `<line data-testid="parte-pierna-der" class="parte" x1="130" y1="130" x2="150" y2="165" />`,
+    ];
+    const visibles = partes.slice(0, juego.partesDibujadas()).join("");
+    return `
+      <svg class="muneco" viewBox="0 0 200 260" data-testid="muneco">
+        <line class="horca" x1="20" y1="240" x2="140" y2="240" />
+        <line class="horca" x1="50" y1="240" x2="50" y2="20" />
+        <line class="horca" x1="50" y1="20" x2="130" y2="20" />
+        <line class="horca" x1="130" y1="20" x2="130" y2="40" />
+        ${visibles}
+      </svg>
+    `;
+  }
+
   function render(): void {
     limpiarKeydown();
 
@@ -82,6 +105,7 @@ export function montarApp(
     if (juego.perdio()) { mensajeTexto = "PERDISTE"; mensajeClase += " perdiste"; }
 
     contenedor.innerHTML = `
+      <div class="muneco-wrap">${buildMuneco()}</div>
       <div class="word-tiles">${buildTiles()}</div>
       <div class="lives-display">
         <span class="lives-label">Vidas</span>

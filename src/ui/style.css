@@ -133,6 +133,36 @@ body {
   color: var(--accent);
 }
 
+/* ── Muñeco del ahorcado ── */
+.muneco-wrap {
+  display: flex;
+  justify-content: center;
+}
+
+.muneco {
+  width: clamp(150px, 40vw, 200px);
+  height: auto;
+}
+
+.muneco .horca {
+  stroke: var(--muted);
+  stroke-width: 6;
+  stroke-linecap: round;
+}
+
+.muneco .parte {
+  stroke: var(--text);
+  stroke-width: 5;
+  stroke-linecap: round;
+  fill: none;
+  animation: aparecer-parte 0.3s ease;
+}
+
+@keyframes aparecer-parte {
+  from { opacity: 0; transform: scale(0.7); }
+  to { opacity: 1; transform: scale(1); }
+}
+
 /* ── Tiles de la palabra ── */
 .word-tiles {
   display: flex;
