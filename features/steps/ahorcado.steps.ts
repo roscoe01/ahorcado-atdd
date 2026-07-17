@@ -25,6 +25,10 @@ Then("se ve el mensaje {string}", async ({ page }, mensaje: string) => {
   await expect(page.getByTestId("message")).toHaveText(mensaje);
 });
 
+Then("aparece la cabeza del ahorcado", async ({ page }) => {
+  await expect(page.getByTestId("parte-cabeza")).toBeVisible();
+});
+
 When("el jugador presiona jugar de nuevo", async ({ page }) => {
   await page.getByRole("button", { name: "Jugar de nuevo" }).click();
 });
